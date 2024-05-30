@@ -51,9 +51,7 @@ public class Ejercicio2 {
 	}
 
 	public static void introducirProductos(Map mapa, Producto nuevoProducto) {
-		for (Producto producto : mapa.size()) {
-			
-		}
+		
 	}
 
 	public static void menuAdministracion(Map mapa) {
