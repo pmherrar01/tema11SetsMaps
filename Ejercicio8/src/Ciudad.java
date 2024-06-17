@@ -1,6 +1,7 @@
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Scanner;
+import java.util.Iterator;
 
 
 public class Ciudad {
@@ -60,5 +61,49 @@ public class Ciudad {
 		cSedes.add(sede);
 	}
 
+	public int getNumSedes() {
+		return this.cSedes.size();
+	}
+
+	public void mostrarDatos() {
+		System.out.println(this.nombreCuidad);
+
+		for (Sede sede : cSedes) {
+			sede.mostrarDatos();
+		}
+	}
+
+	public float calcularIngresosTotales() {
+		float total=0;
+
+		for(Sede sede : this.cSedes) {
+			total = total + sede.getIngresos();
+		}
+		return total;
+	}
+
+	public void mostrarSedeSiMayorMedia(int media) {
+		for(Sede sede : this.cSedes) {
+			if(sede.getIngresos() > media) {
+				System.out.println(sede);
+			}
+		}
+
+	}
+	
+	public boolean buscarPorNombre(String nombre) {
+		boolean encontrado=false;
+		
+		for(Sede sede : cSedes) {
+			if(sede.getNombreSede().equalsIgnoreCase(nombre)) {
+				System.out.println(sede);
+				encontrado = true;
+			}else {
+				System.out.println("No hemos encontrado ninguna sede con nombre: " + nombre);
+				encontrado = false;
+			}
+		}
+		return encontrado;
+	}
 
 }
