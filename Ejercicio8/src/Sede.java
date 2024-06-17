@@ -31,8 +31,15 @@ public class Sede {
 	}
 	
 	public void mostrarDatos() {
-		System.out.println(this.nombreSede);
-		System.out.println(this.ingresos);
+		System.out.println("        " + this.nombreSede);
+		System.out.println("        " + this.ingresos);
 	}
+
+	@Override
+	public String toString() {
+		return "Sede [nombreSede=" + nombreSede + ", ingresos=" + ingresos + "]";
+	}
+	
+	
 	
 }

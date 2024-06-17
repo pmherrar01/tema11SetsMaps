@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Set;
 import java.util.ArrayList;
 
 public class Ejercicio8 {
@@ -6,7 +7,6 @@ public class Ejercicio8 {
 	public static void insertarCiudad(ArrayList<Ciudad> lCiudades) {
 		Scanner entrada = new Scanner(System.in);
 		String nombreCiudad, respuesta;
-		Sede sede;
 		Ciudad ciudad;
 		
 		System.out.println("Nombre ciudad: ");
@@ -18,11 +18,11 @@ public class Ejercicio8 {
 		lCiudades.add(ciudad);
 	}
 	
-	public static void mostrarCiudades(ArrayList<Ciudad> lCiudades) {
-		for(int i = 0; i < lCiudades.size(); i++) {
-			lCiudades.get(i).mostrarDatos();
-		}
-	}
+    public static void mostrarCiudades(ArrayList<Ciudad> lCiudades){
+        for(int i = 0;i < lCiudades.size();i++){
+            lCiudades.get(i).mostrarCiudad();
+        }
+    }
 	
 	public static int calcularMediaIngresos(ArrayList<Ciudad> lCiudades) {
 		float totalIngresos = 0;
@@ -44,25 +44,76 @@ public class Ejercicio8 {
 		}
 	}
 	
-	public static boolean buscarPorNombre(ArrayList<Ciudad> lCiudades) {
-		Scanner entrada = new Scanner(System.in);
-		boolean encontrado = false;
-		
-		System.out.println("Nombre de la sede a buscar");
-		
-		for(Ciudad ciudad : lCiudades) {
-			if(ciudad.buscarPorNombre(entrada.nextLine())) {
-				encontrado = true;
-			}else {
-				encontrado = false;
-			}
-			
-		}
-		return encontrado;
+	public static boolean buscarPorNombre(ArrayList<Ciudad> lCiudades, String nombre) {
+		int i = 0;
+        boolean enc = false;
+        while((!enc)&&(i < lCiudades.size())){
+            if  (lCiudades.get(i).buscarPorNombre(nombre)){
+                enc = true;
+            }
+            else{
+                i++;
+            }
+        }
+        return enc;
 	}
+	
+	public static void añadirSedePorNombreCiudad(ArrayList<Ciudad> lCiudades) {
+		Scanner entrada = new Scanner(System.in);
+		String nombre;
+		boolean encontrado;
+		
+		do {
+			System.out.print("Nombre de ciudad a buscar:");
+			nombre = entrada.nextLine();
+			for(Ciudad ciudad : lCiudades) {
+				if(ciudad.getNombreCuidad().equalsIgnoreCase(nombre)) {
+					encontrado=true;
+					ciudad.rellenarSedes();
+				}
+			}
+		}while(encontrado=false);
+		
+	}
+	 private static int buscarPosicionDeSede(ArrayList<Sede> lSedesOrdenadas, Sede sedeAux){
+	        int i = 0;
+	        boolean enc = false;
+	        while((!enc) &&(i < lSedesOrdenadas.size())){
+	            if  (sedeAux.getIngresos() > lSedesOrdenadas.get(i).getIngresos()){
+	                enc = true;
+	            }
+	            else{
+	                i++;
+	            }
+	        }
+	        return i;
+	    }
+	
+    private static void insertarSedesEnOrden(ArrayList<Sede> lSedesOrdenadas, Set<Sede> cSedesAux){
+        int pos;
+        for(Sede sedeAux:cSedesAux){
+            pos = buscarPosicionDeSede(lSedesOrdenadas, sedeAux);
+            lSedesOrdenadas.add(pos, sedeAux);  //Insertamos ordenadamente la sede que estamos tratando
+        }
+    }
+	
+	public static void mostrarSedesOrdenadasPorIngresos(ArrayList<Ciudad> lCiudades){
+        ArrayList<Sede> lSedesOrdenadas = new ArrayList<>();
+        Set<Sede> cSedesAux;
+        for(int i = 0;i < lCiudades.size();i++){
+            cSedesAux = lCiudades.get(i).getcSedes();
+            insertarSedesEnOrden(lSedesOrdenadas, cSedesAux);
+        }
+        System.out.println("Sedes ordenadas: ");
+        for(Sede sedeAux:lSedesOrdenadas){
+            System.out.println(sedeAux.toString());
+        }
+    }
 	
 	public static void menu(ArrayList<Ciudad> lCiudades) {
 		Scanner entrada = new Scanner(System.in);
+		Scanner entrada1 = new Scanner(System.in);
+		String nombre;
 		int num;
 		
 		do {
@@ -89,14 +140,20 @@ public class Ejercicio8 {
 				mostrarSedesIngresosSupeiorMedia(lCiudades, media);
 				break;
 			case 4:
-				buscarPorNombre(lCiudades);
+				System.out.println("Nombre de la sede a buscar");
+				nombre = entrada1.nextLine();
+				if(buscarPorNombre(lCiudades, nombre)) {
+					System.out.println("La sede con nombre: " + nombre + "ha sido encontrada");
+				}else {
+					System.out.println("La sede con nombre: " + nombre + "no existe");
+				}
+				
 				break;
 			case 5:
+				añadirSedePorNombreCiudad(lCiudades);
 				break;
 			case 6:
-				break;
-			case 7:
-				System.out.println("Saliendo...");
+				mostrarSedesOrdenadasPorIngresos(lCiudades);
 				break;
 			}
 		}while(num!=7);

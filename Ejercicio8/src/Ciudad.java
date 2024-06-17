@@ -51,7 +51,8 @@ public class Ciudad {
 			System.out.print("Ingresos: ");
 			ingresos = entrada1.nextFloat();
 
-			sede = new Sede(nombreSede,ingresos);		
+			sede = new Sede(nombreSede,ingresos);	
+			cSedes.add(sede);
 			System.out.println("Deseas añadir otra sede?");
 			respuesta = entrada2.nextLine();
 		}while(respuesta.equalsIgnoreCase("si"));
@@ -65,11 +66,11 @@ public class Ciudad {
 		return this.cSedes.size();
 	}
 
-	public void mostrarDatos() {
-		System.out.println(this.nombreCuidad);
-
-		for (Sede sede : cSedes) {
-			sede.mostrarDatos();
+	public void mostrarCiudad(){
+		System.out.println("Ciudad: " + this.nombreCuidad);
+		//Mostramos todas las sedes almacenadas en el conjunto cSedes
+		for(Sede s:this.cSedes){
+			s.mostrarDatos();
 		}
 	}
 
@@ -90,20 +91,18 @@ public class Ciudad {
 		}
 
 	}
-	
-	public boolean buscarPorNombre(String nombre) {
-		boolean encontrado=false;
-		
-		for(Sede sede : cSedes) {
-			if(sede.getNombreSede().equalsIgnoreCase(nombre)) {
-				System.out.println(sede);
-				encontrado = true;
-			}else {
-				System.out.println("No hemos encontrado ninguna sede con nombre: " + nombre);
-				encontrado = false;
-			}
-		}
-		return encontrado;
-	}
 
+	public boolean buscarPorNombre(String nombre) {
+		Iterator<Sede> it = this.cSedes.iterator();
+        boolean enc = false;
+        Sede sedeAux;
+        //Mientras no lo encuentre y mientras no llegue al final
+        while((!enc)&&(it.hasNext())){
+            sedeAux = it.next();
+            if  (sedeAux.getNombreSede().equalsIgnoreCase(nombre)){
+                enc = true;
+            }
+        }
+        return enc;
+	}
 }
